@@ -1,29 +1,30 @@
-import { useState } from 'react'
-
+import Slide from './Slide'
+import useSlider from './hooks/useSlider'
 const Slideshow = ({ images }) => {
-    const [index, setIndex] = useState(0)
+    const { index, getNextImage, getPrevImage, nextSlide, prevSlide } = useSlider(images)
     return (
-        <div>
+        <div style={{ position: "relative" }}>
             <div className="slideshow">
-                {/* note need to add track right or left */}
                 <div className="slideshow__slides-box"
                     style={{ transform: `translate3d(${-index * 100}%, 0, 0)` }}
                 >
                     {images.map((image) => {
                         return (
-                            <div key={image.id} 
-                                className={`slideshow__slide ${index === images.indexOf(image) ? 'slideshow__slide--active' : ''}`}
-                                >
-                                <img src={image.urls.regular} alt={image.alt_description} />
-                            </div>
+                            <Slide key={image.id} image={image} active={index === images.indexOf(image) ? 'slideshow__slide--active' : ''} />
                         )
                     })}
                 </div>
 
             </div>
-            <button className="slideshow__button" onClick={() => setIndex(1)}>1</button>
+            <div className='arrow left' onClick={prevSlide}>
+                <img alt="prev thumb" src={getPrevImage()} />
+            </div>
+            <div className='arrow right' onClick={nextSlide}>
+                <img alt="next thumb" src={getNextImage()} />
+            </div>
         </div>
     )
 }
 
 export default Slideshow
+
